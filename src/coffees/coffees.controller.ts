@@ -7,11 +7,11 @@ import {
   Patch,
   Delete,
   Query,
-  HttpException,
-  HttpStatus,
   NotFoundException,
 } from '@nestjs/common';
 import { CoffeesService } from './coffees.service';
+import { CreateCoffeeDto } from './dto/create-coffee.dto';
+import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 
 @Controller('coffees')
 export class CoffeesController {
@@ -24,8 +24,8 @@ export class CoffeesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    const coffee = this.coffeesService.findOne(id);
+  findOne(@Param('id') id: number) {
+    const coffee = this.coffeesService.findOne('' + id);
     if (!coffee) {
       // throw new HttpException(`Coffee #${id} not found.`, HttpStatus.NOT_FOUND);
       throw new NotFoundException(`Coffee #${id} not found.`);
@@ -34,13 +34,13 @@ export class CoffeesController {
   }
 
   @Post()
-  create(@Body() body) {
-    return this.coffeesService.create(body);
+  create(@Body() createCoffeeDto: CreateCoffeeDto) {
+    return this.coffeesService.create(createCoffeeDto);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() body) {
-    return this.coffeesService.update(id, body);
+  update(@Param('id') id: string, @Body() updateBodyDto: UpdateCoffeeDto) {
+    return this.coffeesService.update(id, updateBodyDto);
   }
 
   @Delete(':id')
